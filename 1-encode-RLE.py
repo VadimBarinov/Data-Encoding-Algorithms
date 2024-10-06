@@ -7,7 +7,7 @@ def rle(src):
         # Счетчик повторяющихся байтов
         counterDouble = 1
         # Последовательность неповторяющихся байтов
-        subsequence = ''
+        subsequence = bytearray()
 
         for e in src[1:]:
             if e == current and counterDouble < 127:
@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
     original = open('1-original.txt', 'r')
     string = original.read()
-    compressed = open('1-compressed.txt', 'wb')
+    compressed = open('1-compressed.rle', 'wb')
     compressed.write(rle(string))
     original.close()
     compressed.close()

@@ -1,3 +1,8 @@
+import numpy as np
+from PIL import Image
+
+# Нужно переделать функцию,
+# чтобы преоьразовывала в многомерный массив и потом в изображение
 def restore(src):
     result = ""
     if src:
@@ -22,8 +27,10 @@ def restore(src):
 if __name__ == "__main__":
     compressed = open('1-compressed.rle', 'rb')
     string = compressed.read()
-    print(string)
+    arr = np.array([x for x in string])
+    arr = arr.reshape(int(len(arr)/3), 3)
+
     restored = open('1-restored.txt', 'w')
-    restored.write(restore(string))
+    restored.write(restore(arr))
     compressed.close()
     restored.close()
