@@ -4,6 +4,7 @@ from PIL import Image
 
 def getImg(file):
     img = np.array(Image.open(file).convert('RGB'))
+    print(img.shape)
     return img
 
 def listEquality(first, second):
@@ -17,31 +18,30 @@ def listEquality(first, second):
 def rle(img):
     # Байтовый массив для результата
     result = []
+    # Текущий байт
+    current = img[0][0]
+    # Счетчик повторяющихся байтов
+    counterDouble = 1
+    # Последовательность неповторяющихся байтов
+    subsequence = []
 
-    subresult = []
-
+    # НУЖНО НЕ БРАТЬ САМЫЙ ПЕРВЫЙ ЭЛЕМЕНТ
+    # ПЕРЕДЕЛАТЬ!!!
     for src in img:
-        # Текущий байт
-        current = src[0]
-        # Счетчик повторяющихся байтов
-        counterDouble = 1
-        # Последовательность неповторяющихся байтов
-        subsequence = []
-
-        for e in src[1:]:
+        for e in src:
             if listEquality(e, current) and counterDouble < 127:
                 counterDouble += 1
                 # Добавление последовательности неповторяющихся байтов
                 if (len(subsequence) > 1): 
                     subsequence = subsequence[:-1]
-                    subresult.append(np.array([len(subsequence), 0, 0], dtype='uint8'))
-                    subresult += subsequence
+                    result.append(np.array([len(subsequence), 0, 0], dtype='uint8'))
+                    result += subsequence
                 subsequence = []
             elif counterDouble > 1:
                 # Добавление цепочки одинаковых байтов
                 subsequence.append(e)
-                subresult.append(np.array([(counterDouble + 128), 0, 0], dtype='uint8'))
-                subresult.append(current)
+                result.append(np.array([(counterDouble + 128), 0, 0], dtype='uint8'))
+                result.append(current)
                 current = e
                 counterDouble = 1
             else:
@@ -50,23 +50,20 @@ def rle(img):
                     current = e
                 else:
                     # Добавление последовательности неповторяющихся байтов
-                    subresult.append(np.array([len(subsequence), 0, 0], dtype='uint8'))
-                    subresult += subsequence
+                    result.append(np.array([len(subsequence), 0, 0], dtype='uint8'))
+                    result += subsequence
                     subsequence = []
                     subsequence.append(e)
                     current = e
 
-        if (counterDouble > 1):
-            # Добавление цепочки одинаковых байтов
-            subresult.append(np.array([(counterDouble + 128), 0, 0], dtype='uint8'))
-            subresult.append(current)
-        else:
-            # Добавление последовательности неповторяющихся байтов
-            subresult.append(np.array([len(subsequence), 0, 0], dtype='uint8'))
-            subresult += subsequence
-
-        result += subresult
-        subresult = []
+    if (counterDouble > 1):
+        # Добавление цепочки одинаковых байтов
+        result.append(np.array([(counterDouble + 128), 0, 0], dtype='uint8'))
+        result.append(current)
+    else:
+        # Добавление последовательности неповторяющихся байтов
+        result.append(np.array([len(subsequence), 0, 0], dtype='uint8'))
+        result += subsequence
 
     print(np.array(result, dtype="uint8"))
     return np.array(result, dtype="uint8").tobytes()
