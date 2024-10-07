@@ -1,7 +1,7 @@
 from struct import *
 
 # Входной сжатый файл
-input_file = "compressed.lzw"
+input_file = "LZW/compressed.lzw"
 # Максимальный размер таблицы
 n = 16                  # можно менять для достижения лучшего сжатия          
 maximum_table_size = pow(2,int(n))
@@ -38,7 +38,7 @@ for code in compressed_data:
     string = dictionary[code]
 
 # Сохранение восстановленного файла
-output_file = open("restored.txt", "w")
+output_file = open("LZW/restored.txt", "w")
 for data in decompressed_data:
     output_file.write(data)
     
