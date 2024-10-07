@@ -20,10 +20,10 @@ def restore(src):
     
 
 if __name__ == "__main__":
-    compressed = open('1-compressed.rle', 'rb')
+    compressed = open('TXTtoRLE/1-compressed.rle', 'rb')
     string = compressed.read()
     print(string)
-    restored = open('1-restored.txt', 'w')
+    restored = open('TXTtoRLE/1-restored.txt', 'w')
     restored.write(restore(string))
     compressed.close()
     restored.close()

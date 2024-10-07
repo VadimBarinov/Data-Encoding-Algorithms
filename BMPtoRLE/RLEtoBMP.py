@@ -3,7 +3,7 @@ from PIL import Image
 
 def saveImg(arr):
     img = Image.fromarray(arr, mode='RGB')
-    img.save("image_restored.bmp", format='BMP', quality=100, optimize=False, compress_level=0)
+    img.save("BMPtoRLE/image_restored.bmp", format='BMP', quality=100, optimize=False, compress_level=0)
 
 
 def restore(src, x, y):
@@ -30,7 +30,7 @@ def restore(src, x, y):
     
 
 if __name__ == "__main__":
-    compressed = open('1-compressed.rle', 'rb')
+    compressed = open('BMPtoRLE/1-compressed.rle', 'rb')
     string = compressed.read()
     arr = np.array([x for x in string])
     arr = arr.reshape(int(len(arr)/3), 3)

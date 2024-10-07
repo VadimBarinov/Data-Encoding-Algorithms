@@ -51,9 +51,9 @@ def rle(src):
 
 if __name__ == "__main__":
 
-    original = open('1-original.txt', 'r')
+    original = open('TXTtoRLE/1-original.txt', 'r')
     string = original.read()
-    compressed = open('1-compressed.rle', 'wb')
+    compressed = open('TXTtoRLE/1-compressed.rle', 'wb')
     compressed.write(rle(string))
     original.close()
     compressed.close()

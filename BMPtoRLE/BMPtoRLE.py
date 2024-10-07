@@ -69,10 +69,10 @@ def rle(img, x, y):
 
 if __name__ == "__main__":
 
-    file = 'image.bmp'
+    file = 'BMPtoRLE/image.bmp'
     img = getImg(file)
     x = img.shape[1]
     y = img.shape[0]
-    compressed = open('1-compressed.rle', 'wb')
+    compressed = open('BMPtoRLE/1-compressed.rle', 'wb')
     compressed.write(rle(img, x, y))
     compressed.close()
