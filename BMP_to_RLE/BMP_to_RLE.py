@@ -2,11 +2,11 @@ import numpy as np
 from PIL import Image
 
 
-def getImg(file):
+def get_img(file):
     img = np.array(Image.open(file).convert('RGB'))
     return img
 
-def listEquality(first, second):
+def list_equality(first, second):
     flag = 1
     for i in range(0, len(first)):
         if first[i] != second[i]: 
@@ -21,27 +21,27 @@ def rle(img, x, y):
     # Текущий байт
     current = src[0]
     # Счетчик повторяющихся байтов
-    counterDouble = 1
+    counter_double = 1
     # Последовательность неповторяющихся байтов
     subsequence = []
     subsequence.append(current)
 
     for e in src[1:]:
-        if listEquality(e, current) and counterDouble < 127:
-            counterDouble += 1
+        if list_equality(e, current) and counter_double < 127:
+            counter_double += 1
             # Добавление последовательности неповторяющихся байтов
             if (len(subsequence) > 1): 
                 subsequence = subsequence[:-1]
                 result.append(np.array([len(subsequence), 0, 0], dtype='uint8'))
                 result += subsequence
             subsequence = []
-        elif counterDouble > 1:
+        elif counter_double > 1:
             # Добавление цепочки одинаковых байтов
             subsequence.append(e)
-            result.append(np.array([(counterDouble + 128), 0, 0], dtype='uint8'))
+            result.append(np.array([(counter_double + 128), 0, 0], dtype='uint8'))
             result.append(current)
             current = e
-            counterDouble = 1
+            counter_double = 1
         else:
             if (len(subsequence) < 127):    
                 subsequence.append(e)
@@ -54,9 +54,9 @@ def rle(img, x, y):
                 subsequence.append(e)
                 current = e
 
-    if (counterDouble > 1):
+    if (counter_double > 1):
         # Добавление цепочки одинаковых байтов
-        result.append(np.array([(counterDouble + 128), 0, 0], dtype='uint8'))
+        result.append(np.array([(counter_double + 128), 0, 0], dtype='uint8'))
         result.append(current)
     else:
         # Добавление последовательности неповторяющихся байтов
@@ -70,7 +70,7 @@ def rle(img, x, y):
 if __name__ == "__main__":
 
     file = 'BMPtoRLE/image.bmp'
-    img = getImg(file)
+    img = get_img(file)
     x = img.shape[1]
     y = img.shape[0]
     compressed = open('BMPtoRLE/1-compressed.rle', 'wb')

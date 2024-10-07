@@ -1,38 +1,45 @@
 from sys import argv
 from struct import *
 
-# taking the input file and the number of bits from command line
-# defining the maximum table size
-# opening the input file
-# reading the input file and storing the file data into data variable
-input_file, n = argv[1:]                
+
+# Входной файл
+input_file = "original.txt"
+# Максимальный размер таблицы
+n = 16                  # Можно менять для достижения лучшего сжатия
 maximum_table_size = pow(2,int(n))      
 file = open(input_file)                 
 data = file.read()                      
 
-# Building and initializing the dictionary.
+# Создание и инициализация словаря
 dictionary_size = 256                   
 dictionary = {chr(i): i for i in range(dictionary_size)}    
-string = ""             # String is null.
-compressed_data = []    # variable to store the compressed data.
+string = ""             # пустая строка
+compressed_data = []    # переменная для хранения сжатого текста
 
-# iterating through the input symbols.
-# LZW Compression algorithm
+# Перебор входных символов
+# LZW 
 for symbol in data:                     
-    string_plus_symbol = string + symbol # get input symbol.
+    string_plus_symbol = string + symbol
+    # Если встретилось в словаре
     if string_plus_symbol in dictionary: 
+        # Добавление к строке нового символа 
         string = string_plus_symbol
     else:
+        # Добавление в сжатый текст индекс стооки из словаря
         compressed_data.append(dictionary[string])
+        # Проверка на размер словаря (должен быть меньше указанного)
+        # Иначе перестает добавлять новую строку в словарь
         if(len(dictionary) <= maximum_table_size):
+            # Добавление новой строки в словарь
             dictionary[string_plus_symbol] = dictionary_size
             dictionary_size += 1
         string = symbol
 
+# Добавление индекса последней строки в сжатый текст
 if string in dictionary:
     compressed_data.append(dictionary[string])
 
-# storing the compressed string into a file (byte-wise).
+# Сохранение в байтовом виде
 output_file = open("compressed.lzw", "wb")
 for data in compressed_data:
     output_file.write(pack('>H',int(data)))

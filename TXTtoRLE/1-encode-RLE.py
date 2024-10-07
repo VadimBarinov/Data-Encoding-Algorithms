@@ -5,27 +5,27 @@ def rle(src):
         # Текущий байт
         current = str(src[0])
         # Счетчик повторяющихся байтов
-        counterDouble = 1
+        counter_double = 1
         # Последовательность неповторяющихся байтов
         subsequence = ""
         subsequence += current
 
         for e in src[1:]:
-            if e == current and counterDouble < 127:
-                counterDouble += 1
+            if e == current and counter_double < 127:
+                counter_double += 1
                 # Добавление последовательности неповторяющихся байтов
                 if (len(subsequence) > 1): 
                     subsequence = subsequence[:-1]
                     result.extend(bytes([len(subsequence)]))
                     result.extend((subsequence.encode('utf-8')))
                 subsequence = ""
-            elif counterDouble > 1:
+            elif counter_double > 1:
                 # Добавление цепочки одинаковых байтов
                 subsequence += e
-                result.extend(bytes([counterDouble + 128]))
+                result.extend(bytes([counter_double + 128]))
                 result.extend((current.encode('utf8')))
                 current = e
-                counterDouble = 1
+                counter_double = 1
             else:
                 if (len(subsequence) < 127):    
                     subsequence += e
@@ -37,9 +37,9 @@ def rle(src):
                     subsequence = e
                     current = e
 
-        if (counterDouble > 1):
+        if (counter_double > 1):
             # Добавление цепочки одинаковых байтов
-            result.extend(bytes([counterDouble + 128]))
+            result.extend(bytes([counter_double + 128]))
             result.extend((current.encode('utf8')))
         else:
             # Добавление последовательности неповторяющихся байтов

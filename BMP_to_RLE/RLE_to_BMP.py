@@ -1,7 +1,7 @@
 import numpy as np
 from PIL import Image
 
-def saveImg(arr):
+def save_img(arr):
     img = Image.fromarray(arr, mode='RGB')
     img.save("BMPtoRLE/image_restored.bmp", format='BMP', quality=100, optimize=False, compress_level=0)
 
@@ -36,6 +36,6 @@ if __name__ == "__main__":
     arr = arr.reshape(int(len(arr)/3), 3)
     x = 236
     y = 414
-    restoredArr = restore(arr, x, y)
-    saveImg(restoredArr)
+    restored_arr = restore(arr, x, y)
+    save_img(restored_arr)
     compressed.close()
