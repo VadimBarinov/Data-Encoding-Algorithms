@@ -1,11 +1,9 @@
-from sys import argv
 from struct import *
-
 
 # Входной файл
 input_file = "original.txt"
 # Максимальный размер таблицы
-n = 16                  # Можно менять для достижения лучшего сжатия
+n = 16                  # можно менять для достижения лучшего сжатия
 maximum_table_size = pow(2,int(n))      
 file = open(input_file)                 
 data = file.read()                      
@@ -13,7 +11,7 @@ data = file.read()
 # Создание и инициализация словаря
 dictionary_size = 256                   
 dictionary = {chr(i): i for i in range(dictionary_size)}    
-string = ""             # пустая строка
+string = ""             # строка
 compressed_data = []    # переменная для хранения сжатого текста
 
 # Перебор входных символов
@@ -40,7 +38,8 @@ if string in dictionary:
     compressed_data.append(dictionary[string])
 
 # Сохранение в байтовом виде
-output_file = open("compressed.lzw", "wb")
+out = "compressed.lzw"
+output_file = open(out, "wb")
 for data in compressed_data:
     output_file.write(pack('>H',int(data)))
     
