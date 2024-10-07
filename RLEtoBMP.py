@@ -1,12 +1,13 @@
 import numpy as np
 from PIL import Image
 
-# Нужно переделать функцию,
-# чтобы преоьразовывала в многомерный массив и потом в изображение
-def restore(src):
+def saveImg(arr):
+    img = Image.fromarray(arr, mode='RGB')
+    img.save("image_restored.bmp", format='BMP', quality=100, optimize=False, compress_level=0)
 
+
+def restore(src, x, y):
     result = []
-
     # Номер счетчика повторений в байтовом массиве
     i = 0
     while i < len(src):
@@ -23,10 +24,9 @@ def restore(src):
                 result.append(src[i+j])
             i += src[i][0] + 1
 
-    print(np.array(result))
-    print(len(np.array(result)))
+    print(np.array(result, dtype='uint8').reshape(y, x, 3))
                 
-    return np.array(result).reshape(480, 640, 3)
+    return np.array(result, dtype='uint8').reshape(y, x, 3)
     
 
 if __name__ == "__main__":
@@ -34,7 +34,8 @@ if __name__ == "__main__":
     string = compressed.read()
     arr = np.array([x for x in string])
     arr = arr.reshape(int(len(arr)/3), 3)
-    restored = open('1-restored.txt', 'w')
-    restored.write(restore(arr))
+    x = 236
+    y = 414
+    restoredArr = restore(arr, x, y)
+    saveImg(restoredArr)
     compressed.close()
-    restored.close()

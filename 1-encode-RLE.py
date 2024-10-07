@@ -7,7 +7,8 @@ def rle(src):
         # Счетчик повторяющихся байтов
         counterDouble = 1
         # Последовательность неповторяющихся байтов
-        subsequence = bytearray()
+        subsequence = ""
+        subsequence += current
 
         for e in src[1:]:
             if e == current and counterDouble < 127:
