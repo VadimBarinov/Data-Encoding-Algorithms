@@ -39,7 +39,9 @@ def lzw(data, dictionary, dictionary_size, maximum_table_size):
 
 def main():
     # Входной файл
-    input_file = 'LZW/original.txt'
+    input_file = 'LZW/The two brothers.txt'
+    # input_file = 'LZW/original.txt'
+
     # Максимальный размер таблицы
     n = 16                  # можно менять для достижения лучшего сжатия
     maximum_table_size = pow(2,int(n))      
