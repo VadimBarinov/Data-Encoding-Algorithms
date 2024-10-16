@@ -1,6 +1,5 @@
 from struct import *  
 import pickle
-from encode_huffman import huffman_encode
 
 # аргументы: (закодированная строка, словарь)
 def huffman_decode(encoded, code):  # функция декодирования исходной строки по кодам Хаффмана
@@ -21,13 +20,20 @@ def main():
     output_file = open("HUFFMAN/restored.txt", "w")
 
     code = pickle.load(dictionary_file)
-    # нужно придумать как распаковать 
-    encoded = "".join(bin(elem)[2:] for elem in input_file.read())
+
+    # чтение входного сжатого файла
+    encoded = ""
+    while True:
+        rec = input_file.read(2)
+        if len(rec) != 2:
+            break
+        (data, ) = unpack('>H', rec)
+        encoded += "0" * (8 - len(bin(data)[2:])) + str(bin(data)[2:])
+
     encoded = encoded[:(len(encoded) - int(code['zero_counter']))]
     print(encoded)
 
     output_string = huffman_decode(encoded, code)
-
     output_file.write(output_string)
 
     input_file.close()
