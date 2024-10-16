@@ -1,6 +1,8 @@
 import heapq  # модуль для работы с мин. кучей из стандартной библиотеки Python
 from collections import Counter  # словарь в котором для каждого объекта поддерживается счетчик
 from collections import namedtuple
+from struct import *  
+import pickle
 
 
 # добавим классы для хранения информации о структуре дерева
@@ -36,11 +38,11 @@ def huffman_encode(s):  # функция кодирования строки в 
     return code  # возвращаем словарь символов и соответствующих им кодов
 
 def main():
-
-    # Нужно сделать запись словаря в отдельный файл (через pickle)
-
     input_file = open("HUFFMAN/original.txt", "r")
     output_file = open("HUFFMAN/compressed.huff", "wb")
+    dictionary_file = open("HUFFMAN/dictionary.pkl", "wb")
+
+    # чтение исходного файла
     s = input_file.read()
 
     code = huffman_encode(s)  # кодируем строку
@@ -51,13 +53,23 @@ def main():
         print("{}: {}".format(ch, code[ch]))  # выведем символ и соответствующий ему код
     print(encoded)  # выведем закодированную строку
 
-    l = []
-    for i in range(0, len(s), 8):
-        l.append(int(encoded[i:i+8], 2))
-    output_file.write(bytearray(l))
-    
+    len_encoded = len(encoded) # длина закодированной строки
+    for i in range(0, len(encoded), 8):
+        output_file.write(pack('>H', int(encoded[i:i+8], 2)))
+        
+    # запись в файл оставшихся битов и добавление недостающих нулей
+    zero_counter = len_encoded % 8 # сколько не хватает до 8 в конце строки
+    last_elem = encoded[(len_encoded - zero_counter):] + ('0' * zero_counter)
+    output_file.write(pack('>H', int(last_elem, 2)))
+
+    # добавление в конец словаря элемент, показывающий количество незначящих нулей в конце строки
+    code['zero_counter'] = zero_counter
+    # запись в файл словаря
+    pickle.dump(code, dictionary_file)
+ 
     input_file.close()
     output_file.close()
+    dictionary_file.close()
 
 if __name__ == "__main__":
     main()
