@@ -54,10 +54,10 @@ def main():
     print(encoded)  # выведем закодированную строку
 
     len_encoded = len(encoded) # длина закодированной строки
-    zero_counter = 8 - len_encoded % 8 # сколько не хватает до 8 в конце строки
+    zero_counter = 16 - len_encoded % 16 # сколько не хватает до 16 в конце строки
     encoded += '0' * zero_counter
-    for i in range(0, len(encoded), 8):
-        output_file.write(pack('>H', int(encoded[i:i+8], 2)))
+    for i in range(0, len(encoded), 16):
+        output_file.write(pack('>H', int(encoded[i:i+16], 2)))
 
     # добавление в конец словаря элемент, показывающий количество незначящих нулей в конце строки
     code['zero_counter'] = zero_counter

@@ -19,8 +19,6 @@ def main():
     dictionary_file = open("HUFFMAN/dictionary.pkl", "rb")
     output_file = open("HUFFMAN/restored.txt", "w")
 
-    code = pickle.load(dictionary_file)
-
     # чтение входного сжатого файла
     encoded = ""
     while True:
@@ -28,9 +26,12 @@ def main():
         if len(rec) != 2:
             break
         (data, ) = unpack('>H', rec)
-        encoded += "0" * (8 - len(bin(data)[2:])) + str(bin(data)[2:])
+        encoded += "0" * (16 - len(bin(data)[2:])) + str(bin(data)[2:])
 
+    code = pickle.load(dictionary_file)
     encoded = encoded[:(len(encoded) - int(code['zero_counter']))]
+
+    del code['zero_counter']
     print(encoded)
 
     output_string = huffman_decode(encoded, code)
